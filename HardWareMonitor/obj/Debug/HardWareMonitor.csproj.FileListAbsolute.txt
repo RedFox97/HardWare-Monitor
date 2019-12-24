@@ -1,0 +1,17 @@
+C:\Users\Hieu\OneDrive\Github\HardWare Monitor\HardWareMonitor\bin\Debug\HardWareMonitor.exe.config
+C:\Users\Hieu\OneDrive\Github\HardWare Monitor\HardWareMonitor\bin\Debug\HardWareMonitor.exe
+C:\Users\Hieu\OneDrive\Github\HardWare Monitor\HardWareMonitor\bin\Debug\HardWareMonitor.pdb
+C:\Users\Hieu\OneDrive\Github\HardWare Monitor\HardWareMonitor\bin\Debug\MetroFramework.Design.dll
+C:\Users\Hieu\OneDrive\Github\HardWare Monitor\HardWareMonitor\bin\Debug\MetroFramework.dll
+C:\Users\Hieu\OneDrive\Github\HardWare Monitor\HardWareMonitor\bin\Debug\MetroFramework.Fonts.dll
+C:\Users\Hieu\OneDrive\Github\HardWare Monitor\HardWareMonitor\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Hieu\OneDrive\Github\HardWare Monitor\HardWareMonitor\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Hieu\OneDrive\Github\HardWare Monitor\HardWareMonitor\obj\Debug\HardWareMonitor.csprojAssemblyReference.cache
+C:\Users\Hieu\OneDrive\Github\HardWare Monitor\HardWareMonitor\obj\Debug\HardWareMonitor.Properties.Resources.resources
+C:\Users\Hieu\OneDrive\Github\HardWare Monitor\HardWareMonitor\obj\Debug\HardWareMonitor.csproj.GenerateResource.cache
+C:\Users\Hieu\OneDrive\Github\HardWare Monitor\HardWareMonitor\obj\Debug\HardWareMonitor.csproj.CopyComplete
+C:\Users\Hieu\OneDrive\Github\HardWare Monitor\HardWareMonitor\obj\Debug\HardWareMonitor.exe
+C:\Users\Hieu\OneDrive\Github\HardWare Monitor\HardWareMonitor\obj\Debug\HardWareMonitor.pdb
+C:\Users\Hieu\OneDrive\Github\HardWare Monitor\HardWareMonitor\bin\Debug\OpenHardwareMonitorLib.dll
+C:\Users\Hieu\OneDrive\Github\HardWare Monitor\HardWareMonitor\obj\Debug\HardWareMonitor.Main.resources
+C:\Users\Hieu\OneDrive\Github\HardWare Monitor\HardWareMonitor\obj\Debug\HardWareMonitor.About.resources
