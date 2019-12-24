@@ -147,7 +147,13 @@ void border() {
   tft.fillTriangle(50, 135, 70, 135, 70, 180 , COLOR_BLACK);
   tft.fillRectangle(100, 135, 160, 180, COLOR_RED);
   tft.fillTriangle(100, 135, 120, 135, 100, 180 , COLOR_BLACK);
-//  tft.fillTriangle(50, 135, 120, 135, 85, 210 , COLOR_BLACK);
+  
+  tft.fillRectangle(33, 175, 80, 220, COLOR_RED);
+  tft.fillTriangle(80, 175, 80, 190, 70, 175 , COLOR_BLACK);
+  
+  tft.fillRectangle(94, 175, 138, 220, COLOR_RED);
+  tft.fillTriangle(94, 175, 94, 190, 104, 175 , COLOR_BLACK);
+  
   
   tft.drawLine(0,0,35,0,cpuColor);
   tft.drawLine(35,0 ,41,6,cpuColor);
