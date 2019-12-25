@@ -1,10 +1,10 @@
-#include "ESP8266WiFi.h"
-#include <ArduinoJson.h>
+#include "ESP8266WiFi.h"                // Version 2.6.3
+#include <ArduinoJson.h>                // Version 6.13.0
 #include <DNSServer.h>
 #include <ESP8266WebServer.h>
-#include <WiFiManager.h>
+#include <WiFiManager.h>                // Version 0.15.0 beta
 #include <Ticker.h>
-#include <TFT_22_ILI9225.h>
+#include <TFT_22_ILI9225.h>             // Version 1.4.3
 #include <../fonts/FreeSans9pt7b.h>
 #include <../fonts/FreeSans8pt7b.h>
 
@@ -24,7 +24,7 @@
 
 String cpuName, cpuLoad, cpuTemp, ramLoad, gpuName, gpuLoad, gpuTemp;
 String oldCPULoad, oldCPUTemp, oldRAMLoad, oldGPULoad, oldGPUTemp;
-int timer, demFlash;
+int timer, demFlash, matKetNoiWiFi;
 bool lanDauMoApp = true, ketNoiApp, doiWiFi;
 uint16_t cpuColor, gpuColor;
 
@@ -36,34 +36,28 @@ Ticker flipper;
 
 void setup() {
   Serial.begin(115200);
-  pinMode(flash,INPUT_PULLUP);
-  pinMode(2,OUTPUT);
-  digitalWrite(2,LOW);
-  tft.setGFXFont(&FreeSans8pt7b);
-  tft.begin();
-  tft.clear();
-  tft.setOrientation(2);
+  pinMode(flash,INPUT_PULLUP);                                  // Khai báo nút ấn
+  tft.setGFXFont(&FreeSans8pt7b);                               // Chọn font
+  tft.begin();                                                  // Khởi tạo màn hình TFT
+  tft.clear();                                                  // Xóa toàn màn hình
+  tft.setOrientation(2);                                        // Xoay màn hình
   tft.drawGFXText(10, 65, "Connecting to WiFi", COLOR_WHITE);
-  flipper.attach(1, caiDat);
+  flipper.attach(1, caiDat);                                    // Ngắt đếm thời gian kết nối wifi
   wifiManager.autoConnect("HME","12345678");
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(100);
-    Serial.print(".");
-  }
-  flipper.detach();
-  flipper.attach(1, ngat);
-  tft.clear();
-  tft.drawGFXText(35, 25, "App not open", COLOR_RED);
+  flipper.detach();                                             // Đã kết nối WiFi, tắt ngắt
+  flipper.attach(1, ngat);                                      // Khởi tạo ngắt chu kì 1s đếm thời gian
+  tft.clear();                                                  // Xóa toàn màn hình
+  tft.drawGFXText(35, 25, "App not open", COLOR_RED);           // Thông báo app chưa mở, yêu cầu mở app và kết nối tới địa chỉ IP sau
   tft.drawGFXText(33, 45, "TCP server IP", COLOR_WHITE);
   tft.drawGFXText(35, 65, WiFi.localIP().toString(), COLOR_WHITE);
-  server.begin();
+  server.begin();                                               // Khởi tạo server để giao tiếp với app
 }
 
 void loop() {
-  if(ketNoiApp)
-    getData();
+  if(ketNoiApp)                                                       // Còn kết nối với app
+    getData();                                                        // Đọc dữ liệu gửi về
   else {
-    tft.drawGFXText(35, 25, "App not open", COLOR_RED);
+    tft.drawGFXText(35, 25, "App not open", COLOR_RED);               // Thông báo app chưa mở, yêu cầu mở app và kết nối tới địa chỉ IP sau
     tft.drawGFXText(33, 45, "TCP server IP", COLOR_WHITE);
     tft.drawGFXText(35, 65, WiFi.localIP().toString(), COLOR_WHITE);
     if (!client.connected()) {
@@ -76,26 +70,26 @@ void loop() {
       tft.setGFXFont(&FreeSans9pt7b);
     }
   }
-  if(doiWiFi) {
-    WiFi.disconnect();
-    server.close();
-    tft.clear();
+  if(doiWiFi) {                                                       // Thay đổi WiFi
+    WiFi.disconnect();                                                // Ngắt kết nối wifi
+    server.close();                                                   // Tắt server
+    tft.clear();                                                      // Xóa toàn màn hình
     tft.setGFXFont(&FreeSans8pt7b);
-    tft.drawGFXText(5, 40, "Connect to WiFi HME", COLOR_WHITE);
+    tft.drawGFXText(5, 40, "Connect to WiFi HME", COLOR_WHITE);       // Thông báo thiết bị chưa kết nối wifi
     tft.drawGFXText(33, 55, "with password", COLOR_WHITE);
     tft.drawGFXText(45, 70, "12345678", COLOR_WHITE);
     tft.drawGFXText(55,85, "to config", COLOR_WHITE);
     tft.drawGFXText(54,100, "new WiFi", COLOR_WHITE);
-    wifiManager.autoConnect("HME","12345678");
-    tft.clear();
-    server.begin();
+    wifiManager.autoConnect("HME","12345678");                        // Tạo kết nối mới
+    tft.clear();                                                      // Xóa toàn màn hình
+    server.begin();                                                   // Khởi tạo server để giao tiếp với app
     doiWiFi = false;
   }
 }
 
 void caiDat() {
   timer++;
-  if(timer == 20) {
+  if(timer == 20) {                                                   // Sau 20s không kết nối được WiFi sẽ hiện thông báo để người dùng biết
     tft.drawGFXText(10, 65, "Connecting to WiFi", COLOR_BLACK);
     tft.drawGFXText(25, 25, "Connection Fail", COLOR_WHITE);
     tft.drawGFXText(5, 40, "Connect to WiFi HME", COLOR_WHITE);
@@ -109,9 +103,14 @@ void caiDat() {
 
 void ngat() {
   if(!doiWiFi) {
-    if(WiFi.status() != WL_CONNECTED)
+    if(WiFi.status() != WL_CONNECTED) {                               // Mất kết nối, tự kết nối lại
       WiFi.reconnect();
-    if(digitalRead(flash)) demFlash = 0;
+      matKetNoiWiFi++;
+      if(matKetNoiWiFi == 20) {
+        doiWiFi = true;                                               // Mất mạng sau 20s, yêu cầu đổi mạng
+      }
+    }
+    if(digitalRead(flash)) demFlash = 0;                              // Ấn giữ nút FLASH 10s sẽ thay đổi WiFi
     if(!digitalRead(flash) && demFlash<601) demFlash++;
     if(demFlash == 10) doiWiFi = true;
   }
@@ -137,9 +136,9 @@ void hienThiNhietDo(int x, int y, String data, uint16_t color) {
 }
 
 void border() {
-  cpuName.toUpperCase();
+  cpuName.toUpperCase();  
   gpuName.toUpperCase();
-  if(cpuName.indexOf("AMD") == 0)
+  if(cpuName.indexOf("AMD") == 0)             // Chọn màu
     cpuColor = cpuAMD;
   else if(cpuName.indexOf("INTEL") == 0)
     cpuColor = cpuIntel;
@@ -213,8 +212,8 @@ void border() {
 void getData() {
   if (client.connected()) {
     if (client.available()>0) {
-      String data = client.readStringUntil('\n');
-      DynamicJsonDocument root(250);
+      String data = client.readStringUntil('\n');             // Đọc dữ liệu trả về từ app
+      DynamicJsonDocument root(250);                          // Decode để đọc dữ liệu
       deserializeJson(root, (char*) data.c_str());
       cpuName = root["CPU"]["Name"].as<String>();
       cpuLoad = root["CPU"]["Load"].as<String>();
@@ -225,11 +224,11 @@ void getData() {
       gpuTemp = root["GPU"]["Temp"].as<String>();
       if(cpuLoad.length()> 5)
       cpuLoad = cpuLoad.substring(0,5);
-      if(lanDauMoApp) {
+      if(lanDauMoApp) {                                       // Kẻ viền
         border();
         lanDauMoApp = false;
       }
-      else {
+      else {                                                  // Cập nhật thông tin lên LCD
         if(oldCPULoad != cpuLoad) {
           tft.drawGFXText(3, 49, oldCPULoad+"%", 0x0000);
           tft.drawGFXText(3, 49, cpuLoad+"%", cpuColor);
