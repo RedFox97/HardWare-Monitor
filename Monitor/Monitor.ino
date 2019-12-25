@@ -25,7 +25,7 @@
 String cpuName, cpuLoad, cpuTemp, ramLoad, gpuName, gpuLoad, gpuTemp;
 String oldCPULoad, oldCPUTemp, oldRAMLoad, oldGPULoad, oldGPUTemp;
 int timer, demFlash;
-bool lanDauMoApp = true, ketNoiApp;
+bool lanDauMoApp = true, ketNoiApp, doiWiFi;
 uint16_t cpuColor, gpuColor;
 
 WiFiServer server(80);
@@ -43,7 +43,7 @@ void setup() {
   tft.begin();
   tft.clear();
   tft.setOrientation(2);
-  tft.drawGFXText(10, 25, "Connecting to WiFi", COLOR_WHITE);
+  tft.drawGFXText(10, 65, "Connecting to WiFi", COLOR_WHITE);
   flipper.attach(1, caiDat);
   wifiManager.autoConnect("HME","12345678");
   while (WiFi.status() != WL_CONNECTED) {
@@ -53,7 +53,9 @@ void setup() {
   flipper.detach();
   flipper.attach(1, ngat);
   tft.clear();
-  tft.drawGFXText(35, 25, "App not open", COLOR_WHITE);
+  tft.drawGFXText(35, 25, "App not open", COLOR_RED);
+  tft.drawGFXText(33, 45, "TCP server IP", COLOR_WHITE);
+  tft.drawGFXText(35, 65, WiFi.localIP().toString(), COLOR_WHITE);
   server.begin();
 }
 
@@ -74,11 +76,11 @@ void loop() {
       tft.setGFXFont(&FreeSans9pt7b);
     }
   }
-  if(digitalRead(flash)) demFlash = 0;
-  if(!digitalRead(flash) && demFlash<601) demFlash++;
-  if(demFlash == 600) {
+  if(doiWiFi) {
     WiFi.disconnect();
+    server.close();
     tft.clear();
+    tft.setGFXFont(&FreeSans8pt7b);
     tft.drawGFXText(5, 40, "Connect to WiFi HME", COLOR_WHITE);
     tft.drawGFXText(33, 55, "with password", COLOR_WHITE);
     tft.drawGFXText(45, 70, "12345678", COLOR_WHITE);
@@ -86,13 +88,16 @@ void loop() {
     tft.drawGFXText(54,100, "new WiFi", COLOR_WHITE);
     wifiManager.autoConnect("HME","12345678");
     tft.clear();
+    server.begin();
+    tft.setGFXFont(&FreeSans9pt7b);
+    doiWiFi = false;
   }
 }
 
 void caiDat() {
   timer++;
   if(timer == 20) {
-    tft.drawGFXText(10, 25, "Connecting to WiFi", COLOR_BLACK);
+    tft.drawGFXText(10, 65, "Connecting to WiFi", COLOR_BLACK);
     tft.drawGFXText(25, 25, "Connection Fail", COLOR_WHITE);
     tft.drawGFXText(5, 40, "Connect to WiFi HME", COLOR_WHITE);
     tft.drawGFXText(33, 55, "with password", COLOR_WHITE);
@@ -101,12 +106,16 @@ void caiDat() {
     tft.drawGFXText(54,100, "new WiFi", COLOR_WHITE);
     flipper.detach();
   }
-  Serial.println(timer);
 }
 
 void ngat() {
-  if(WiFi.status() != WL_CONNECTED)
-    WiFi.reconnect();
+  if(!doiWiFi) {
+    if(WiFi.status() != WL_CONNECTED)
+      WiFi.reconnect();
+    if(digitalRead(flash)) demFlash = 0;
+    if(!digitalRead(flash) && demFlash<601) demFlash++;
+    if(demFlash == 10) doiWiFi = true;
+  }
 }
 
 void hienThiNhietDo(int x, int y, String data, uint16_t color) {

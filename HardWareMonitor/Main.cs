@@ -35,11 +35,13 @@ namespace HardWareMonitor
             else
             {
                 IPAddr.Text = ip.InnerText;                             // Đọc địa chỉ
-                client.ConnectAsync(ip.InnerText, 80).Wait(1000);       // Thử kết nối với server, timeout 5000ms
+                client.ConnectAsync(ip.InnerText, 80).Wait(3000);       // Thử kết nối với server, timeout 5000ms
                 if (client.Connected)
                 {
                     IPAddr.ReadOnly = true;
                     connectButton.Text = "Disconnect";
+                    status.Text = "Connected";
+                    status.ForeColor = Color.Green;
                     timer.Enabled = true;
                 }
                 else

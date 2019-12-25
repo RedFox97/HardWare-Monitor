@@ -130,7 +130,6 @@
             this.Name = "Main";
             this.Padding = new System.Windows.Forms.Padding(40, 111, 40, 37);
             this.Resizable = false;
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
