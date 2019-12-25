@@ -89,7 +89,6 @@ void loop() {
     wifiManager.autoConnect("HME","12345678");
     tft.clear();
     server.begin();
-    tft.setGFXFont(&FreeSans9pt7b);
     doiWiFi = false;
   }
 }
